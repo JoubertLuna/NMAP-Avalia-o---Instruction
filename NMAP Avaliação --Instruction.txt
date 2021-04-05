@@ -1,0 +1,159 @@
+Avaliação de Segurança nos Serviços Levantados DEBIAN 9.13 / DEBIAN 10.6
+Vou tomar como base o serviço do GLPI que no momento se encontra com o endereço ipv4 0.0.0.0
+
+Principais comandos NMAP:
+
+-p
+Você pode determinar que uma porta ou sequencia de portas seja varrida, sendo assim, ele não executa a varredura apenas em portas baixas:
+
+Nmap –p22 192.168.0.7
+Nmap –p22-90 192.168.0.7/16
+Nmap –p22,55,90 192.168.0.7
+
+-g
+Define a porta de origem. Geralmente as portas de origem são portas altas (acima de 1024).Com o Nmap, podemos dizer que a requisição ou o Scan está partindo de uma porta baixa:
+
+Nmap –g53 192.168.0.7
+Nmap –g 22 192.168.0.7/16
+
+-sP
+Pingscan: Algumas vezes é necessário saber se um determinado host ou rede está no ar. Nmap pode enviar pacotes ICMP “echo request”para verificar se determinado host ou rede está ativa. Hoje em dia, existem muitos filtros que rejeitam os pacotes ICMP “echo request”.
+
+Nmap –sP 192.168.0.7
+Nmap –sP 192.168.0.7/16
+
+-sV
+Version detection: Após as portas TCP e/ou UDP serem descobertas por algum dos métodos, o nmap irá determinar qual o serviço está rodando atualmente. O arquivo nmap-service é utilizado para determinar tipos de protocolos, nome da aplicação, número da versão e outros detalhes
+
+Nmap –sV 192.168.0.7
+
+-sR
+RCP scan: Este método trabalha em conjunto com várias técnicas do Nmap. Ele considera todas as portas TCP e UDP abertas e envia comandos NULL SunRPC, para determinar se realmente são portas RPC. É como se o comando “rpcinfo -p”, estivesse sendo utilizado, mesmo através de um firewall (ou protegido por TCPwrappers).
+
+Nmap –sR 192.168.0.7
+Nmap –sR 192.168.0.7/16
+
+-sS
+TCP SYN scan: Técnica também conhecida como “half-open”, pois não abre uma conexão TCP completa. É enviado um pacote SYN, como se ele fosse uma conexão real e aguarda uma resposta. Caso um pacote SYN-ACK seja recebido, a porta está aberta.
+
+Nmap –sS 192.168.0.7
+Nmap –sS 192.168.0.7/16
+
+-sn
+PingScan: Durante o Scan, o Nmap verifica o status da porta, porém, com a opção –sn ele verifica apenas se a máquina está viva, sem efetuar scan de portas.
+
+Nmap –sn 192.168.0.7
+Nmap –sn 192.168.0.7/16
+
+-O
+OS detection: É possível descobrir qual o sistema operacional, ou chegar o mais próximo possível.
+
+Nmap –O 192.168.0.7
+Nmap –O 192.168.0.7/16
+
+--A
+Advanced: O Nmap efetua todas as varreduras possíveis para trazer o máximo de informações sobre o alvo, sendo assim, todas as informações possíveis.
+
+Nmap –A 192.168.0.7
+Nmap –A 192.168.0.7/16
+
+-n
+Nunca Resolver DNS: Ao efetuar a varredura em determinadas máquinas, ele não efetua a resolução de DNS.
+
+Nmap –n 192.168.0.7
+Nmap–n 192.168.0.7/16
+
+-R
+Sempre resolver DNS: Com esta opção, ele sempre tentará resolver DNS, ou seja, ele sempre tentará descobrir o hostname do alvo baseado em consulta DNS.
+
+Nmap –R 192.168.0.7
+Nmap –R 192.168.0.7/16
+
+-T
+Timing Template(0-5): Você pode setar a velocidade da varredura, quanto maior o número, mais rápido:
+
+Nmap –T1 192.168.0.7
+Nmap –T4 192.168.0.7/16
+Nmap –T5 192.168.0.7
+
+-v
+Verbosity Level: Você pode obter em tela, tudo o que o Nmap está fazendo. A opção –vv traz mais detalhes
+
+Nmap –v 192.168.0.7
+Nmap –vv 192.168.0.7/16
+
+-F
+Fast Mode: Scaneia menos portas que o padrão, geralmente procura por portas conhecidas.
+
+Nmap –F 192.168.0.7
+Nmap –F 192.168.0.7/16
+
+--open
+Open Ports: Verifica apenas as portas abertas ou possivelmente abertas.
+
+Nmap –open 192.168.0.7
+Nmap--open 192.168.0.7/16
+
+--packet-trace
+PacketTrace: Apresenta em tela todos os pacotes enviados e recebidos
+
+Nmap –packet-trace 192.168.0.7
+Nmap –packet-trace 192.168.0.7/16
+
+--iflist
+Interface List: Apresenta em tela as interfaces do atacante e o roteador.
+
+Nmap –iflist
+
+-e
+Specified Interface: Você pode utilizar interfaces específicas para varredura
+
+Nmap -e eth0 192.168.0.7
+Nmap -e eth0 192.168.0.7/16
+
+-oN| -oX| -oS| -oG<arquivo>
+Output File: É possível gerar relatório de diversas maneiras -oN(Normal), -oX(XML), -oS(Script Kiddie) e –oG(Grepável)
+
+Nmap-oNrelatório.txt 192.168.0.7
+Nmap–oSrelatório.txt 192.168.0.7/16
+
+-iL Input List: Você poderá varrer máquinas de uma determinada lista.
+
+Nmap -iL lista_maquinas.txt
+
+--dns-server
+DNS Server: Você pode utilizar determinados servidores DNS para resolver nomes de máquinas específicas
+
+Nmap--dns-server 8.8.8.8,8.8.4.4 www.siteteste.com.br
+
+--version-intensity<0-9> Version Intensity: Aumente a intensidade da varredura em busca de versionamento de serviços na máquina alvo.
+
+Nmap --version-intensity9 192.168.0.7
+
+--send-ip
+SendIP: Requisições ARP são realizadas para efetuar varredura no modo padrão, você pode enviar pacotes IP ao invés de ARP.
+
+Nmap-send-ip 192.168.0.7/16
+
+--privileged
+Privileged: Envia os pacotes informando que o utilizados possui os privilégios necessários
+
+Nmap –privileged 192.168.0.7/16
+
+Buscando informações privilegiadas dos serviços
+
+nmap –script smb-check-vulns.nse –script-args=unsafe=1 192.168.0.7/16
+
+Buscar métodos HTTP de um determinado alvo:
+
+nmap--script "http-methods" 192.168.0.7
+
+Buscar por Zona de transferência de DNS e Whois:
+
+nmap--script "dns-zone-transfer,whois" 192.168.0.7
+
+Utilizar todos os scripts não intrusivos nos serviços HTTP e SSH:
+
+nmap--script "http-* or ssh-* and not intrusive" 192.168.0.7
+
+Joubert Luna
